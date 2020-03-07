@@ -18,6 +18,16 @@ socket.on('newMessage', function (newMessage) {
     jQuery('#messages').append(li);
 });
 
+socket.on('newLocationMessage', function (newLocation) {
+    var li = jQuery('<li></li>');
+    var a = jQuery('<a target="_blank">my location</a>');
+    a.attr('href', newLocation.url);
+    li.text(`${newLocation.from}: `);
+    li.append(a);
+
+    jQuery('#messages').append(li);
+});
+
 jQuery('#message-form').on('submit', function (e) {
     e.preventDefault();
 
@@ -36,7 +46,11 @@ locationButton.on('click' , function (e) {
     }
 
     navigator.geolocation.getCurrentPosition(function (position) {
-
+        console.log(position);
+        socket.emit('createLocationMessage', {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+        });
     }, function () {
         alert('Unable to fetch your location.');
     })
