@@ -14,9 +14,29 @@ app.use(express.static(publicPath));
 io.on('connection', (socket) => {
     console.log('New user is connected');
 
+    /*socket.emit('newEmail', {
+        from: 'ali@gh.com',
+        text: 'gholomreza is dying! come soon.',
+        createdAt: 1243
+    });*/
+
+    socket.emit('newMessage', {
+        from: 'chamanfa',
+        text: 'عصر میای بیرون ؟ ساعت 6 و نیم',
+        createdAt: '12:30'
+    });
+
     socket.on('disconnect', () => {
         console.log('user disconnect');
     });
+
+    /*socket.on('createEmail', (email) => {
+        console.log(email);
+    });*/
+
+    socket.on('createMessage', (newMessage) => {
+        console.log('A message created', newMessage);
+    })
 });
 
 server.listen(port, () => {
