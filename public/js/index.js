@@ -28,3 +28,21 @@ jQuery('#message-form').on('submit', function (e) {
         console.log('ok!', data)
     })
 });
+
+var locationButton = jQuery('#send-location');
+locationButton.on('click' , function (e) {
+    if (!navigator.geolocation) {
+        return alert('geolacation is not supported by your browser.');
+    }
+
+    navigator.geolocation.getCurrentPosition(function (position) {
+
+    }, function () {
+        alert('Unable to fetch your location.');
+    })
+});
+
+
+
+
+
