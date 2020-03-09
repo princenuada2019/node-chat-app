@@ -12,25 +12,26 @@ socket.on('disconnect', function () {
 });
 
 socket.on('newMessage', function (newMessage) {
-    console.log('New message', newMessage);
     var formattedTime = moment(newMessage.createdAt).format('h:mm a');
-    var li = jQuery('<li></li>');
-    li.text(`${newMessage.from} ${formattedTime}: ${newMessage.text}`);
+    var template = jQuery('#message-template').html();
+    var html = Mustache.render(template, {
+        text: newMessage.text,
+        from: newMessage.from,
+        timestamp: formattedTime
+    });
 
-    if (newMessage.text !== '') {
-        jQuery('#messages').append(li);
-    }
+    jQuery('#messages').append(html);
 });
 
 socket.on('newLocationMessage', function (newLocation) {
     var formattedTime = moment(newLocation.createdAt).format('h:mm a');
-    var li = jQuery('<li></li>');
-    var a = jQuery('<a target="_blank">my location</a>');
-    a.attr('href', newLocation.url);
-    li.text(`${newLocation.from} ${formattedTime}: `);
-    li.append(a);
-
-    jQuery('#messages').append(li);
+    var template = jQuery('#location-message-template').html();
+    var html = Mustache.render(template, {
+        from: newLocation.from,
+        url: newLocation.url,
+        timestamp: formattedTime
+    });
+    jQuery('#messages').append(html);
 });
 
 jQuery('#message-form').on('submit', function (e) {
